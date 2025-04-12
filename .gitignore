@@ -1,0 +1,25 @@
+# Thư mục node_modules (rất nặng, không cần push)
+node_modules/
+
+# Biến môi trường, chứa thông tin nhạy cảm
+.env
+
+# Lock files (nếu bạn không muốn commit)
+package-lock.json
+
+# VSCode settings (có thể bỏ nếu team dùng cấu hình riêng)
+.vscode/
+
+# File hệ thống và rác
+$RECYCLE.BIN/
+.DS_Store
+Thumbs.db
+
+# Log files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Bỏ file test hoặc tạm (nếu có)
+*.log
+*.tmp
