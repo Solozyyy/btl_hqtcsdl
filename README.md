@@ -41,4 +41,11 @@ mongosh "mongodb://localhost:27017,localhost:27018,localhost:27019/?replicaSet=r
 --
 ![image](https://github.com/user-attachments/assets/ac003d1e-35c3-4fb9-8887-d4e71cecf5fd)
 
+Muốn xem dữ liệu trong mongoDB Compass thì tạo connection với URI
+
+--
+mongodb://localhost:27017,localhost:27018,localhost:27019/?replicaSet=rs0
+--
+
+![image](https://github.com/user-attachments/assets/8beaab59-9ded-46b5-ba81-0aa64bc8b1aa)
 
