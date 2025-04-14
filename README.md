@@ -37,7 +37,7 @@ Lưu ý: Không phải máy nào cũng giống nhau nên tự tìm cách mà set
 Mở mongosh và chạy lệnh này để bật server:
 
 --
-D:\mongoDB\mongosh-2.3.9-win32-x64\mongosh-2.3.9-win32-x64\bin\mongosh.exe
+mongosh "mongodb://localhost:27017,localhost:27018,localhost:27019/?replicaSet=rs0"
 --
 ![image](https://github.com/user-attachments/assets/ac003d1e-35c3-4fb9-8887-d4e71cecf5fd)
 
