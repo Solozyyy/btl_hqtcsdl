@@ -6,7 +6,7 @@ const router = express.Router();
 router.post('/createNewEmail', async (req, res) => {
     try {
         const { userid, email } = req.body;
-        const newEmail = ({
+        const newEmail = new Email({
             userid,
             email
         });
@@ -20,7 +20,7 @@ router.post('/createNewEmail', async (req, res) => {
 
 router.get('/getEmails', async (req, res) => {
     try {
-        const emails = Email.find();
+        const emails = await Email.find();
         res.status(200).json(emails);
 
     } catch (error) {
