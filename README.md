@@ -49,3 +49,8 @@ mongodb://localhost:27017,localhost:27018,localhost:27019/?replicaSet=rs0
 
 ![image](https://github.com/user-attachments/assets/8beaab59-9ded-46b5-ba81-0aa64bc8b1aa)
 
+Diagram trong sql server
+
+![image](https://github.com/user-attachments/assets/d213b18e-aee1-4499-b5a4-175b9e4002fd)
+
+
