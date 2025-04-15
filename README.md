@@ -1,7 +1,7 @@
 khởi động tất cả replica set
 Lưu ý: Không phải máy nào cũng giống nhau nên tự tìm cách mà setup (không quá khó đâu)
 
--- 
+
 "C:\Program Files\MongoDB\Server\8.0\bin\mongod.exe" ^
  --replSet "rs0" ^
  --port 27017 ^
@@ -12,7 +12,7 @@ Lưu ý: Không phải máy nào cũng giống nhau nên tự tìm cách mà set
 ![image](https://github.com/user-attachments/assets/562600fc-88a6-440f-8d80-c26a54d8a440)
 
 
---
+
 "C:\Program Files\MongoDB\Server\8.0\bin\mongod.exe" ^
  --replSet "rs0" ^
  --port 27018 ^
@@ -23,7 +23,7 @@ Lưu ý: Không phải máy nào cũng giống nhau nên tự tìm cách mà set
 ![image](https://github.com/user-attachments/assets/25976d2e-7783-45f7-93a1-829d97167418)
 
 
---
+
 "C:\Program Files\MongoDB\Server\8.0\bin\mongod.exe" ^
  --replSet "rs0" ^
  --port 27019 ^
