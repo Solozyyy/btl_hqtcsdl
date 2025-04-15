@@ -1,14 +1,37 @@
-const mongoose = require("mongoose");
+const { sql, poolPromise } = require('../database/sqlserver');
 
-const userSchema = new mongoose.Schema({
-    username: { type: String, require: true, unique: true },
-    password: { type: String, require: true }
-});
+// Tạo người dùng mới
+const createUser = async (username, password, email) => {
+    try {
+        const pool = await poolPromise;
+        const result = await pool.request()
+            .input('username', sql.NVarChar, username)
+            .input('password', sql.VarChar, password)
+            .input('email', sql.VarChar, email)
+            .query(`
+                INSERT INTO Users (User_name, Password, Email) 
+                VALUES (@username, @password, @email)
+            `);
+        return result;
+    } catch (err) {
+        throw err;
+    }
+};
 
-const User = mongoose.model('User', userSchema);
-// tạo 1 model trong schema trong mongoDB
-//User bây giờ là một class, có thể được dùng để thực hiện các 
-//thao tác với MongoDB như tạo, đọc, cập nhật, xóa (CRUD)
+// Lấy người dùng theo username
+const getUserByUsername = async (username) => {
+    try {
+        const pool = await poolPromise;
+        const result = await pool.request()
+            .input('username', sql.NVarChar, username)
+            .query(`SELECT * FROM Users WHERE User_name = @username`);
+        return result.recordset[0]; // Trả về 1 user
+    } catch (err) {
+        throw err;
+    }
+};
 
-module.exports = User;
-// dòng này xuất module để tái sử dụng ở file khác trong project
+module.exports = {
+    createUser,
+    getUserByUsername
+};

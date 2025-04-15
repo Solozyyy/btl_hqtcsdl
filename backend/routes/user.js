@@ -1,6 +1,5 @@
 const express = require("express");
-const mongoose = require("mongoose");
-const User = require("../models/User");
+const { poolPromise } = require("../database/sqlserver");
 const authMiddleware = require("../middleware/auth");
 
 const router = express.Router();
@@ -8,8 +7,10 @@ const router = express.Router();
 // Lấy danh sách tất cả người dùng
 router.get("/", authMiddleware, async (req, res) => {
     try {
-        const users = await User.find();
-        res.status(200).json(users);
+        const pool = await poolPromise;
+        const result = await pool.request().query("SELECT * FROM Users");
+
+        res.status(200).json(result.recordset);
     } catch (error) {
         res.status(500).json({ message: "Lỗi server", error });
     }
@@ -18,10 +19,17 @@ router.get("/", authMiddleware, async (req, res) => {
 // Tạo mới người dùng
 router.post("/", authMiddleware, async (req, res) => {
     try {
-        const { username, password } = req.body;
-        const newUser = new User({ username, password });
-        await newUser.save();
-        res.status(201).json({ message: "Thêm người dùng thành công!", user: newUser });
+        const { username, password, email } = req.body;
+
+        // Thực hiện insert vào bảng Users trong SQL Server
+        const pool = await poolPromise;
+        const result = await pool.request()
+            .input('username', sql.NVarChar(50), username)
+            .input('password', sql.NVarChar(255), password)
+            .input('email', sql.NVarChar(100), email)
+            .query("INSERT INTO Users (User_name, Password, Email) OUTPUT INSERTED.User_id, INSERTED.User_name, INSERTED.Email VALUES (@username, @password, @email)");
+
+        res.status(201).json({ message: "Thêm người dùng thành công!", user: result.recordset[0] });
     } catch (error) {
         res.status(500).json({ message: "Lỗi server", error });
     }
@@ -31,23 +39,26 @@ router.post("/", authMiddleware, async (req, res) => {
 router.put("/:id", authMiddleware, async (req, res) => {
     try {
         const { id } = req.params;
-        const { username, password } = req.body;
+        const { username, password, email } = req.body;
 
-        if (!mongoose.Types.ObjectId.isValid(id)) {
+        // Kiểm tra id hợp lệ
+        if (!Number(id)) {
             return res.status(400).json({ message: "ID không hợp lệ" });
         }
 
-        const updatedUser = await User.findByIdAndUpdate(
-            id,
-            { username, password },
-            { new: true }
-        );
+        const pool = await poolPromise;
+        const result = await pool.request()
+            .input('id', sql.Int, id)
+            .input('username', sql.NVarChar(50), username)
+            .input('password', sql.NVarChar(255), password)
+            .input('email', sql.NVarChar(100), email)
+            .query("UPDATE Users SET User_name = @username, Password = @password, Email = @email WHERE User_id = @id");
 
-        if (!updatedUser) {
+        if (result.rowsAffected[0] === 0) {
             return res.status(404).json({ message: "Không tìm thấy user" });
         }
 
-        res.status(200).json({ message: "Cập nhật thành công", user: updatedUser });
+        res.status(200).json({ message: "Cập nhật thành công" });
 
     } catch (error) {
         res.status(500).json({ message: "Lỗi server", error });
@@ -59,17 +70,21 @@ router.delete("/:id", authMiddleware, async (req, res) => {
     try {
         const { id } = req.params;
 
-        if (!mongoose.Types.ObjectId.isValid(id)) {
+        // Kiểm tra id hợp lệ
+        if (!Number(id)) {
             return res.status(400).json({ message: "ID không hợp lệ" });
         }
 
-        const deleteUser = await User.findByIdAndDelete(id);
+        const pool = await poolPromise;
+        const result = await pool.request()
+            .input('id', sql.Int, id)
+            .query("DELETE FROM Users WHERE User_id = @id");
 
-        if (!deleteUser) {
+        if (result.rowsAffected[0] === 0) {
             return res.status(404).json({ message: "ID không tồn tại" });
         }
 
-        res.status(200).json({ message: "Xóa thành công user", user: deleteUser });
+        res.status(200).json({ message: "Xóa thành công user" });
     } catch (error) {
         res.status(500).json({ message: "Lỗi server", error });
     }
