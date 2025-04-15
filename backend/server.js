@@ -23,7 +23,8 @@ app.use("/api/users", userRoutes);
 app.use("/api/messages", messageRoutes);
 app.use("/api/email", emailRoutes);
 
-// Kết nối MongoDB
+// kkết nối MongoDB
+// nhớ khởi động 3 server mongodb trước khi connectconnect
 mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => console.log("✅ Kết nối MongoDB thành công!"))
     .catch(err => console.log(err));
