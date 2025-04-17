@@ -9,6 +9,8 @@ const authRoutes = require("./routes/auth");
 const userRoutes = require("./routes/user");
 const messageRoutes = require("./routes/message.route.js");
 const emailRoutes = require("./routes/email.route.js");
+const friendRequestRoutes = require("./routes/friendrequest.route.js");
+const friendRoutes = require("./routes/friend.route.js");
 
 //config connect to sql server
 const { sql, poolPromise } = require("./database/sqlserver");
@@ -24,6 +26,9 @@ app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/messages", messageRoutes);
 app.use("/api/email", emailRoutes);
+app.use("/api/friendRequest", friendRequestRoutes);
+app.use("/api/friend", friendRoutes);
+
 
 // kkết nối MongoDB
 // nhớ khởi động 3 server mongodb trước khi connectconnect
